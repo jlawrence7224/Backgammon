@@ -1,6 +1,107 @@
+
+#include <iostream>
+#include <stdlib.h>
 #include "board.h"
 #include "gametree.h"
 
+
+std::ostream& operator<<(std::ostream& s, const Board& b)
+{
+	s << std::endl << "  24  23  22  21  20  19 BAR  18  17  16  15  14  13";
+	s << std::endl << "|--- --- --- --- --- ---|---|--- --- --- --- --- --- |";
+	for (int i = 1; i <= 5; ++i)
+	{
+		s << std::endl << "| ";
+		for (int j = 24; j > 18; --j)
+		{
+			int cnt = std::abs(b.board[j]);
+
+			if (cnt >= i)
+			{
+				if (i <= 5)
+				{
+					s << (b.board[j] > 0 ? "*   " : "X   ");
+				}
+				else
+				{
+					s << cnt;
+					s << (cnt < 10 ? "   " : "  ");
+				}
+			}
+			else
+				s << "    ";
+		}
+		s << ((b.Wbar() >= i) ? "*   " : "    ");
+
+		for (int j = 18; j > 12; --j)
+		{
+			int cnt = std::abs(b.board[j]);
+
+			if (cnt >= i)
+			{
+				if (i <= 5)
+				{
+					s << (b.board[j] > 0 ? "*   " : "X   ");
+				}
+				else
+				{
+					s << cnt;
+					s << (cnt < 10 ? "   " : "  ");
+				}
+			}
+			else
+				s << "    ";
+		}
+	}
+	s << std::endl << "|                       |   |                        |";
+	s << std::endl << "|--- --- --- --- --- ---|---|--- --- --- --- --- --- |";
+	s << std::endl << "|                       |   |                        |";
+	for (int i = 5; i <= 1; ++i)
+	{
+		s << std::endl << "| ";
+		for (int j = 1; j <= 6; ++j)
+		{
+			int cnt = std::abs(b.board[j]);
+
+			if (cnt >= i)
+			{
+				if (i <= 5)
+				{
+					s << (b.board[j] > 0 ? "*   " : "X   ");
+				}
+				else
+				{
+					s << cnt;
+					s << (cnt < 10 ? "   " : "  ");
+				}
+			}
+			else
+				s << "    ";
+		}
+		s << ((b.Bbar() >= i) ? "X   " : "    ");
+
+		for (int j = 7; j <= 12; ++j)
+		{
+			int cnt = std::abs(b.board[j]);
+
+			if (cnt >= i)
+			{
+				if (i <= 5)
+				{
+					s << (b.board[j] > 0 ? "*   " : "X   ");
+				}
+				else
+				{
+					s << cnt;
+					s << (cnt < 10 ? "   " : "  ");
+				}
+			}
+			else
+				s << "    ";
+		}
+	}
+	return s;
+}
 #if 0
 template<class MoveContainer>
 void Board::push_board(MoveContainer & tree) { tree.push_board(*this); }

@@ -108,4 +108,12 @@ struct PNR : ENR
 	float Pwin(Hash hw, Hash hb);
 };
 
+/// <summary>
+/// for each inner table position
+/// The Expectation and Probability distribution of the
+/// random variable X where X=n is the event that a player
+/// bares off in n turns when always choosing min ENR moves.
+/// 
+/// The singleton instance of struct PNR;
+/// </summary>
 extern struct PNR Pnr;

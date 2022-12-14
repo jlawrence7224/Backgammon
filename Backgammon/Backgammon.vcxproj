@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClCompile Include="roll.cpp" />
     <ClCompile Include="mcts.cpp" />
-    <ClCompile Include="endgame.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="eg_hash.cpp" />

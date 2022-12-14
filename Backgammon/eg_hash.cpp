@@ -1,7 +1,5 @@
 #include "eg_hash.h"
 
-struct eg_hash eg;  // singleton
-
 int64 binom(int64 n, int64 k)
 {
     k = std::min(k, n - k);

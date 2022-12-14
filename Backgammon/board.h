@@ -490,7 +490,7 @@ struct Board {
 	}
 
 };
-
+std::ostream& operator<<(std::ostream&, const Board& b);
 
 /// <summary>
 /// A 'Board' augmented with 'Info' required for move generation

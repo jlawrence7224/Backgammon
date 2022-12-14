@@ -1,6 +1,6 @@
 #include "pwinx.h"
 
-p_opt exact;  // singleton
+
 
 /// <summary>
 /// Accumulate the minimum of the P(win) values with hb to move
@@ -23,7 +23,7 @@ struct minPexact {
     }
 };
 
-float p_opt::compute_p_exact(int hb, BoardInfo& b, const Roll& r)
+float p_opt::init_p_exact(int hb, BoardInfo& b, const Roll& r)
 {
     // find minimum compute_enr over possible moves with roll 'r'
     minPexact min_p(hb,p_win);
@@ -34,18 +34,18 @@ float p_opt::compute_p_exact(int hb, BoardInfo& b, const Roll& r)
 // compute exact win probabilites for (hw,hb) inner boards
 // assuming p_opt has been computed for all positions (w,b)
 // with (w+b) < (hw+hb).
-void p_opt::compute_p_exact(Hash hw, Hash hb, BoardInfo& b)
+void p_opt::init_p_exact(Hash hw, Hash hb, BoardInfo& b)
 {
     double p = 0;
     for (auto& r : Roll::rolls21)
     {
-        p += r.p * compute_p_exact(hb, b, r);
+        p += r.p * init_p_exact(hb, b, r);
     }
     p_win[hw][hb] = 1.0 - p;
 }
 
 // compute exact win probabilites of first (n_exact,n_exact) inner boards
-void p_opt::compute_p_exact()
+void p_opt::init_p_exact()
 {
     // Init terminal positions
     p_win[0][0] = 1.0;
@@ -64,7 +64,7 @@ void p_opt::compute_p_exact()
         for (int hb = i; hb > 0; --hb)
         {
             BoardInfo B(*++it);
-            compute_p_exact(it._hash, hb, B);
+            init_p_exact(it._hash, hb, B);
             Assert(it._hash + hb == i + 1);
         }
     }
@@ -75,7 +75,7 @@ void p_opt::compute_p_exact()
         for (int hb = n_exact - 1; it._hash < n_exact; --hb, ++it)
         {
             BoardInfo B(*it);
-            compute_p_exact(it._hash, hb, B);
+            init_p_exact(it._hash, hb, B);
         }
     }
 }

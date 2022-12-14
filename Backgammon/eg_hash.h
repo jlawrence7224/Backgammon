@@ -38,14 +38,14 @@ struct eg_hash
 	/// <param name="n">1..7</param>
 	/// <param name="k">-1..15</param>
 	/// <returns></returns>
-	int64 mc(size_t n, size_t k) 
+	int64 mc(int64 n, int64 k) 
 	{ 
 		Assert(1 <= n && n <= n_pre && -1 <= k && k <= k_pre);
-		Assert(multichoose(n, k) == multi_choose[n - 1][k + 1]);
+		//Assert(multichoose(n, k) == multi_choose[n - 1][k + 1]);
 		return multi_choose[n - 1][k + 1];
 	}
 
-	Hash S(size_t i, size_t K) { return mc(7 - i, 15 - (K + 1)); }
+	Hash S(int64 i, int64 K) { return mc(7 - i, 15 - (K + 1)); }
 
 	/// <summary>
 	/// Compute perfect hash of the inner table b
