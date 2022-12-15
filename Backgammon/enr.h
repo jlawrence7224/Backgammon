@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "eg_hash.h"
 #include "roll.h"
 
@@ -18,12 +19,12 @@ struct finite_support_vector
 	/// upper bound of non-zero values
 	/// </summary>
 	/// <returns></returns>
-	size_t  upper() { return support.size() + offset; }
+	size_t  upper() const { return support.size() + offset; }
 	/// <summary>
 	/// lower bound of non-zero values
 	/// </summary>
 	/// <returns></returns>
-	size_t  lower() { return offset; }
+	size_t  lower() const { return offset; }
 
 	float   operator[](size_t i) { return support[i - offset]; }
 	float   at(int i) { return (i < lower()) ? 0.0 : (i >= upper()) ? 1.0 : (*this)[i]; }
@@ -42,6 +43,8 @@ struct finite_support_vector
 		support[support.size() - 1] = 1.0;
 	}
 };
+
+std::ostream& operator<<(std::ostream&, const finite_support_vector& b);
 
 /// <summary>
 /// for each inner table position

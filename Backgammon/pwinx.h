@@ -5,7 +5,7 @@ constexpr int n_7_6 = 924;		// multichoose(7,6) == # of 6 checker inner board po
 constexpr int n_7_7 = 1716;		// multichoose(7,7) == # of 7 checker inner board positions
 constexpr int n_7_8 = 3002;		// multichoose(7,8) == # of 8 checker inner board positions
 constexpr int n_7_9 = 5005;		// multichoose(7,9) == # of 9 checker inner board positions
-constexpr int n_exact = 5005;	// n_7_8;
+constexpr int n_exact = n_7_6;  // n_7_9;
 
 /// <summary>
 /// Singleton class

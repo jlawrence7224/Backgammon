@@ -5,6 +5,7 @@
 #include "inttyp.h"
 #include "board.h"
 
+
 constexpr int n_inner_table_configurations = 54264;	// multichoose(7,15)
 
 // Combinatorial functions used

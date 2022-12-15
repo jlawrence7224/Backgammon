@@ -1,5 +1,16 @@
 #include "enr.h"
 
+std::ostream& operator<<(std::ostream& s, const finite_support_vector& v)
+{
+    float d = 0.0;
+    int i = v.lower();
+    for( auto dx : v.support)
+    {
+        s << i++ << ": " << dx - d << " ";
+        d = dx;
+    }
+    return s;
+}
 /// <summary>
 /// Accumulate the minimum of the compute_enr (looked up in enr vector) 
 /// of the boards pushed.

@@ -5,7 +5,6 @@
 #include <algorithm>
 #include "roll.h"
 #include "range.h"
-#include "endgame.h"
 
 class GameTree;
 
@@ -25,6 +24,8 @@ struct Board {
 	// White moves from bar 0 pips 1 to 24 finished 25
 	// Black moves from 24 to 1
 	static constexpr int16 init_pip_count = 2 * 24 + 5 * 13 + 3 * 8 + 5 * 6;
+	using inner_table = std::array<int, 7>;
+
 	Board()
 		: _finishedB(0), _barB(0), pipCntW(init_pip_count), pipCntB(init_pip_count),
 		board
@@ -72,7 +73,25 @@ struct Board {
 		info.avail = andn((info.outside < 4 && board[0] == 0) ? BAREOFF : BOARD, pt_b);
 	}
 
-	using InnerBoard = const endgame::inner_board&;
+	using InnerBoard = const inner_table&;
+
+	// Initialize a board with both sides baring-off, nothing on the bar,
+	// InnerBoards given for W and B
+	Board(const InnerBoard& w, InnerBoard& b) : _finishedB(b[0]), _barB(0), pipCntW(0), pipCntB(0)
+	{
+		std::memset(&board[0], 0, sizeof board);
+		board[25] = w[0];
+		for (int i = 1; i < 7; ++i)
+		{
+			board[25 - i] = w[i];
+			board[i] = -b[i];
+		}
+	}
+	// Initialize a board given InnerBoard hashes of W and B
+	Board(int64 w, int64 b);
+
+
+
 	// Initialize the inner board of White
 	Board(const InnerBoard& b, Info& info) : _finishedB(0), _barB(0), pipCntW(0), pipCntB(0)
 	{
@@ -94,6 +113,8 @@ struct Board {
 	int	Wbar()			const { return board[0]; }
 	int Bbar()			const { return _barB; }
 	int	finished()		const { return board[25]; }
+	int	finishedW()		const { return board[25]; }
+	int	finishedB()		const { return _finishedB; }
 	// ** TO DO ** Score backgammon
 	float	Won() { return (finished() == 15) ? 1 + (_finishedB == 0) : 0; }
 
