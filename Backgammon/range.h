@@ -39,7 +39,7 @@
 //*
 //*            subrange(r,i,j) returns the subrange [r.begin()+i,r.begin()+j).
 //*
-//*            msrange(t,n) constructs a range of 'n' objects of type 't', for
+//*            msrange(T,n) constructs a range of 'n' objects of type 'T', for
 //*            which the underlying storage is allocated on the program stack.
 //*            It is implemented as a macro, the expansion of which references
 //*            'n' more than once,  so be careful that the expression 'n' does

@@ -36,6 +36,12 @@
     <ClCompile Include="enr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gametree.h">
@@ -69,6 +75,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="enr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="eval.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

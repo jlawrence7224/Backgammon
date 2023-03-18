@@ -131,6 +131,4 @@ namespace endgame
 	using Dist = shifted_vector;
 	using XDist = std::vector<Dist>;
 	extern XDist Xdist;
-
-	
 };

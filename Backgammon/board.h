@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "roll.h"
 #include "range.h"
+#include "scm.h"
 
 class GameTree;
 
@@ -115,14 +116,45 @@ struct Board {
 	int	finished()		const { return board[25]; }
 	int	finishedW()		const { return board[25]; }
 	int	finishedB()		const { return _finishedB; }
+	int pipW()			const { return pipCntW; }
+	int pipB()			const { return pipCntB; }
+
+	// Defined in eval.cpp
+	bool  bareoffW()	const;	// All W checkers in inner board or finished
+	bool  bareoffB()	const;	// All B checkers in inner board or finished
+	bool  bareoff_race()const;	// Both White and Black bareing-off
+	float eval(bool& terminal)			const;	// %win: black to move
+	float endgame_eval(bool& terminal)	const;
+
 	// ** TO DO ** Score backgammon
 	float	Won() { return (finished() == 15) ? 1 + (_finishedB == 0) : 0; }
+
+	// Debug utility
+	bool ComputePipCount()
+	{
+		int W = 25 * Wbar();
+		int B = 25 * Bbar();
+		for (int i = 1; i <= 24; ++i)
+		{
+			if (int b = board[i])
+			{
+				if (b > 0)
+					W += b * (25 - i);
+				else
+					B -= b * i;
+			}
+		}
+		bool correct = (pipCntW == W && pipCntB == B);
+		pipCntW = W; pipCntB = B;
+		return correct;
+	}
 
 	void _hit(uint to)
 	{
 		Assert(board[to] == -1);
 		board[to] = 1;
 		++_barB;
+		pipCntB += (25 - to);
 	}
 	int8 decr(Pip from) { return --board[from]; }
 	void incr(Pip to, bool& hit)
@@ -143,33 +175,38 @@ struct Board {
 	{
 		board[to] = -1;
 		--_barB;
+		pipCntB -= (25 - to);
 	}
 	void undoMove(Pip from, Pip to, bool hit)
 	{
+		pipCntW += (to - from);
 		++board[from];
 		if (hit) _undoHit(to); else --board[to];
 	}
-
 	void move(Pip from, Pip to, bool& hit)
 	{
 		Assert((to <= 25) && (to > from));
+		pipCntW -= (to - from);
 		decr(from);
 		incr(to, hit);
 	}
 	// return hit rather than last
 	bool move(uint from, uint to)
 	{
+		pipCntW -= (to - from);
 		decr(from);
 		return incr(to);
 	}
-	int8 bareOff(uint from)
+	int8 bareOff(uint from, uint to)
 	{
 		Assert(from > 18);
+		pipCntW -= (25 - from);
 		++board[25]; return --board[from];
 	}
-	void undoBareOff(uint from)
+	void undoBareOff(uint from, uint to)
 	{
 		++board[from]; --board[25];
+		pipCntW += (25 - from);
 	}
 
 	// occupied by White
@@ -204,26 +241,6 @@ struct Board {
 	bool bareoffOK(Pip f, Pip& to, int outside) { Assert(to >= 25); return outside == 0 && (to == 25 || backmost(f, to)); }
 	bool crossover(Pip f, Pip t) { return f < 19 && t >= 19; }
 
-#if 0
-	template<class MoveContainer = GameTree>
-	void push_board(MoveContainer & tree);
-	template<class MoveContainer = GameTree>
-	void genMoves(MoveContainer& tree, Info& info, Die hi, Die lo);
-	template<class MoveContainer = GameTree>
-	void genMovesFromBar(MoveContainer& tree, Info& info, Die hi, Die lo);
-	template<class MoveContainer = GameTree>
-	void genMovesDoubles(MoveContainer& tree, Info& info, Die d, int n = 4);
-	template<class MoveContainer = GameTree>
-	void genMovesHiLo(MoveContainer& tree, Info& info, Die hi, Die lo);
-	template<class MoveContainer = GameTree>
-	void enqueMove(MoveContainer& tree, Pip from, Pip to);
-	template<class MoveContainer = GameTree>
-	void genOne(MoveContainer& tree, Bitboard w, Die d);
-	template<class MoveContainer = GameTree>
-	bool genN(MoveContainer& b, Bitboard occ, Bitboard avail, Die d, int outside, int n);
-	template<class MoveContainer = GameTree>
-	bool genHL(MoveContainer& tree, Bitboard occ, Bitboard a_hi, Bitboard a_lo, Die hi, Die lo, int outside);
-#endif
 	template<class MoveContainer>
 	void push_board(MoveContainer& tree) { tree.push_board(*this); }
 
@@ -294,7 +311,7 @@ struct Board {
 						{
 							// If we generated a bar/hi/hi+lo move 
 							// and neither board[hi] nor board[lo] are hits
-							// Then don't generate a bar/lo/hi+lo move
+							// Then don'T generate a bar/lo/hi+lo move
 
 							lo = 31;	// Set lo to a value outside of avail >> hi
 						}
@@ -387,10 +404,10 @@ struct Board {
 							return false;
 				}
 				for (int i = 0; i < cnt; ++i)
-					bareOff(from);
+					bareOff(from,to);
 				bool ret = genN(tree, ++occ, avail, d, 0, n - cnt);
 				for (int i = 0; i < cnt; ++i)
-					undoBareOff(from);
+					undoBareOff(from,to);
 				return ret;
 			}
 			Assert(outside > 0);
@@ -488,7 +505,7 @@ struct Board {
 	{
 		if (!genHL(tree, info.occ_w, info.avail >> hi, info.avail >> lo, hi, lo, info.outside))
 		{
-			// Can not play both hi and lo rolls. Try playing just one of the die.
+			// Cannot play both hi and lo rolls. Try playing just one of the die.
 			bool play_hi = genN(tree, info.occ_w, info.avail >> hi, hi, info.outside, 1);
 			bool play_lo = genN(tree, info.occ_w, info.avail >> lo, lo, info.outside, 1);
 			if (!(play_hi || play_lo))

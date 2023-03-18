@@ -1,4 +1,5 @@
 #include "enr.h"
+#include "board.h"
 
 std::ostream& operator<<(std::ostream& s, const finite_support_vector& v)
 {

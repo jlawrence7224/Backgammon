@@ -1,4 +1,5 @@
 #include "eg_hash.h"
+#include "board.h"
 
 int64 binom(int64 n, int64 k)
 {

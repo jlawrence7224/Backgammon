@@ -146,6 +146,8 @@
     <ClCompile Include="eg_hash.cpp" />
     <ClCompile Include="pwinx.cpp" />
     <ClCompile Include="enr.cpp" />
+    <ClCompile Include="scm.cpp" />
+    <ClCompile Include="eval.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gametree.h" />
@@ -153,6 +155,8 @@
     <ClInclude Include="endgame.h" />
     <ClInclude Include="eg_hash.h" />
     <ClInclude Include="enr.h" />
+    <ClInclude Include="eval.h" />
+    <ClInclude Include="scm.h" />
     <ClInclude Include="pwinx.h" />
     <ClInclude Include="roll.h" />
     <ClInclude Include="intrinsics.h" />

@@ -57,6 +57,6 @@ const std::vector<Roll> Roll::rolls21 = [] {
 			r.push_back(rolls36[i * 6 + j]);
 	// sort the rolls with high ordinal first (pip_count_1,lo_1) > (pip_count_2,lo_2)
 	// 6.6 > 5.5 > ... > 2.1
-	std::sort(r.begin(),r.end(),std::greater<Roll>());
+	std::sort(r.begin(),r.end(),std::less<Roll>());
 	return r;
 }();

@@ -4,14 +4,11 @@
 #include <list>
 #include <stdlib.h>
 #include <algorithm>
+#include "eval.h"
 // #include "endgame.h"
-#include "enr.h"
-#include "pwinx.h"
 
-struct eg_hash eg;  // singleton
+#include "board.h"
 
-PNR Pnr;
-p_opt exact;  // singleton
 
 int usage(char** argv)
 {
@@ -41,8 +38,8 @@ int main(int argc, char** argv)
 
     max_diff = -1.0;
     I = -1; J = -1;
-    for (int i = 1; i < p_opt::N; ++i)
-        for (int j = 1; j < p_opt::N; ++j)
+    for (int i = 1; i < p_exact::N; ++i)
+        for (int j = 1; j < p_exact::N; ++j)
             if (max_diff < abs(Pnr.Pwin(i,j) - exact.Pwin(i, j)))
             {
                 max_diff = abs(Pnr.Pwin(i,j) - exact.Pwin(i, j));

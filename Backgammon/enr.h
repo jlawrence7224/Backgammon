@@ -48,9 +48,9 @@ std::ostream& operator<<(std::ostream&, const finite_support_vector& b);
 
 /// <summary>
 /// for each inner table position
-/// The Expectation of the
-/// random variable X where X=n is the event that a player
-/// bares off in n turns when always choosing min ENR moves.
+/// The Expectation of the random variable X 
+/// where X=n is the event that a player bares off 
+/// in n turns when always choosing min ENR moves.
 /// </summary>
 struct ENR {
 	using enrvec = std::vector<float>;
@@ -65,16 +65,16 @@ struct ENR {
 	float   compute_enr(BoardInfo& b);
 
 	/// <summary>
-	/// Hash of best move using min ENR strategy
+	/// compute hash of best move using min ENR strategy
 	/// </summary>
 	/// <param name="b"></param>
 	/// <param name="r"></param>
-	/// <returns></returns>
+	/// <returns>Hash of best move using min ENR strategy</returns>
 	Hash    bestMove(BoardInfo& b, const Roll& r) const;
 
 	/// <summary>
 	/// E[X]
-	/// Expected value of X for inner table position with hash h
+	/// Expected value of X of inner table position with hash h
 	/// </summary>
 	/// <param name="h"></param>
 	/// <returns></returns>
@@ -105,10 +105,11 @@ struct PNR : ENR
 	/// The Win probability of player to move
 	/// when both players use min ENR strategy
 	/// </summary>
-	/// <param name="hw">inner board hash of player to move</param>
-	/// <param name="hb">inner board hash of opponent</param>
+	/// <param name="to_move">inner board hash of player to move</param>
+	/// <param name="opp">inner board hash of opponent</param>
 	/// <returns>P(player to move wins)</returns>
-	float Pwin(Hash hw, Hash hb);
+	float Pwin(Hash to_move, Hash opp);
+	float Pwin(eg_hash::BwHash h) { return Pwin(h.first, h.second); }
 };
 
 /// <summary>

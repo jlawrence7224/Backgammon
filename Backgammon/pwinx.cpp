@@ -1,5 +1,5 @@
 #include "pwinx.h"
-
+#include "board.h"
 
 
 /// <summary>
@@ -8,7 +8,7 @@
 /// </summary>
 struct minPexact {
     using Hash = eg_hash::Hash;
-    using Pwin_t = p_opt::Pwin_t;
+    using Pwin_t = p_exact::Pwin_t;
     minPexact(Hash hb, const Pwin_t& pwin) : pwin(pwin), hb(hb), min_p(std::numeric_limits<float>::infinity()) {}
 
     const Pwin_t& pwin;
@@ -23,7 +23,7 @@ struct minPexact {
     }
 };
 
-float p_opt::init_p_exact(int hb, BoardInfo& b, const Roll& r)
+float p_exact::init_p_exact(int hb, BoardInfo& b, const Roll& r)
 {
     // find minimum compute_enr over possible moves with roll 'r'
     minPexact min_p(hb,p_win);
@@ -32,9 +32,9 @@ float p_opt::init_p_exact(int hb, BoardInfo& b, const Roll& r)
 }
 
 // compute exact win probabilites for (hw,hb) inner boards
-// assuming p_opt has been computed for all positions (w,b)
+// assuming p_exact has been computed for all positions (w,b)
 // with (w+b) < (hw+hb).
-void p_opt::init_p_exact(Hash hw, Hash hb, BoardInfo& b)
+void p_exact::init_p_exact(Hash hw, Hash hb, BoardInfo& b)
 {
     double p = 0;
     for (auto& r : Roll::rolls21)
@@ -45,7 +45,7 @@ void p_opt::init_p_exact(Hash hw, Hash hb, BoardInfo& b)
 }
 
 // compute exact win probabilites of first (n_exact,n_exact) inner boards
-void p_opt::init_p_exact()
+void p_exact::init_p_exact()
 {
     // Init terminal positions
     p_win[0][0] = 1.0;

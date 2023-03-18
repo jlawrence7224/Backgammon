@@ -6,6 +6,12 @@
 #include "eg_hash.h"
 
 
+/// <summary>
+/// Initialize board to an endgame bare-off race
+/// from the hashes of white and black inner boards
+/// </summary>
+/// <param name="w">hash of White's inner board</param>
+/// <param name="b">hash of Black's inner board</param>
 Board::Board(int64 w, int64 b)
 {
 	inner_table wt, bt;

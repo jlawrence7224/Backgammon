@@ -3,8 +3,9 @@
 #include <array>
 #include <cmath>
 #include "inttyp.h"
-#include "board.h"
 
+struct Board;
+struct BoardInfo;
 
 constexpr int n_inner_table_configurations = 54264;	// multichoose(7,15)
 
@@ -101,9 +102,15 @@ struct inner_table_iterator
 			if (checkers[i] > 0)
 				stack.push_back(i);
 	}
-	// Initialize to 0th position -- all checkers finished
+	/// <summary>
+	/// Initialize to 0th position -- all checkers finished
+	/// </summary>
 	inner_table_iterator() : _hash(0), checkers{ k, 0, 0, 0, 0, 0, 0 } { stack.reserve(8); stack.push_back(0); }
-	// Initialize to position with hash = n
+
+	/// <summary>
+	/// Initialize to position with hash = n
+	/// </summary>
+	/// <param name="n"></param>
 	inner_table_iterator(Hash n) : _hash(n)
 	{
 		eg.inverse_hash(n, checkers);
